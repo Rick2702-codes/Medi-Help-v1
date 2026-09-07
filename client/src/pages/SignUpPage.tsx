@@ -8,6 +8,7 @@ const SignUpPage: React.FC = () => {
     firstName: '',
     lastName: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
   });
@@ -104,6 +105,25 @@ const SignUpPage: React.FC = () => {
                 placeholder="you@example.com"
                 required
               />
+            </label>
+
+            <label className={styles.field}>
+              <span>Mobile number</span>
+              <input
+                type="tel"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                placeholder="+country code and number"
+                autoComplete="tel"
+                inputMode="tel"
+                pattern="^\\+?[1-9][\\d\s()-]{7,18}$"
+                aria-describedby="phone-help"
+                required
+              />
+              <small id="phone-help" className={styles.fieldHint}>
+                Include your country code so we can send SMS reminders.
+              </small>
             </label>
 
             <label className={styles.field}>
