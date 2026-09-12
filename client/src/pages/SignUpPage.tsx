@@ -26,7 +26,7 @@ const SignUpPage: React.FC = () => {
     setError('');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
 
     if (form.password.length < 6) {
@@ -39,8 +39,13 @@ const SignUpPage: React.FC = () => {
       return;
     }
 
-    console.log('Creating account with:', form);
-    // TODO: call backend signup API here
+    await fetch("http://localhost:5000", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(form)
+    });
 
     navigate('/');
   };
