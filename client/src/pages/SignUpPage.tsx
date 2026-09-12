@@ -13,6 +13,7 @@ const SignUpPage: React.FC = () => {
     confirmPassword: '',
   });
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -26,7 +27,7 @@ const SignUpPage: React.FC = () => {
     setError('');
   };
 
-  const handleSubmit = async(e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (form.password.length < 6) {
@@ -39,15 +40,30 @@ const SignUpPage: React.FC = () => {
       return;
     }
 
-    await fetch("http://localhost:5000", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(form)
-    });
+    setError('');
+    setIsSubmitting(true);
 
-    navigate('/');
+    try {
+      const response = await fetch("http://localhost:5000", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(form)
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(result.message || 'Unable to create your account. Please try again.');
+        return;
+      }
+
+      navigate('/');
+    } catch {
+      setError('Unable to reach the server. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -179,8 +195,8 @@ const SignUpPage: React.FC = () => {
 
             {error && <p className={styles.errorText}>{error}</p>}
 
-            <button type="submit" className={styles.primaryButton}>
-              Create account
+            <button type="submit" className={styles.primaryButton} disabled={isSubmitting}>
+              {isSubmitting ? 'Creating account...' : 'Create account'}
             </button>
           </form>
 

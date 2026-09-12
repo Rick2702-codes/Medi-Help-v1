@@ -4,5 +4,3 @@ build/
 .env
 .env.*
 !.env.example
-MEDI-HELP-BRIEF.md
-LEARNING-GUIDE.md

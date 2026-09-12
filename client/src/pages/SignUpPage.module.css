@@ -205,6 +205,13 @@
   transform: translateY(0);
 }
 
+.primaryButton:disabled {
+  cursor: wait;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+}
+
 .loginText {
   margin-top: 22px;
   text-align: center;
