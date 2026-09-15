@@ -75,7 +75,7 @@ The current routes are:
 - `/signup` renders the account creation page.
 - `/forgot-password` renders the password recovery page.
 
-The sign-up form collects first name, last name, email, mobile number, password, and password confirmation. It validates the password locally, sends the form to the current signup API endpoint, displays server or network errors, disables the submit button while waiting, and redirects to login only after a successful HTTP response.
+The sign-up form collects first name, last name, email, mobile number, password, and password confirmation. It validates the password locally, sends the form to `POST http://localhost:5000/api/auth/signup`, displays server or network errors, and redirects to login only after a successful HTTP response.
 
 ### Signup request flow
 
@@ -85,11 +85,15 @@ When the user submits the signup form:
 2. The frontend waits for the server response.
 3. A non-success response such as `400` or `409` is shown on the signup page.
 4. A network failure shows a connection error instead of redirecting.
-5. Only a successful response allows navigation back to the login page.
+5. Only a successful response allows navigation back to the login page with a temporary success message.
 
 This is important because calling `fetch` successfully does not necessarily mean the account was created. The HTTP response status must also be checked.
 
-The current frontend sends the request to `POST http://localhost:5000`. This works with the collaborator's current server implementation, but the endpoint should later be moved to the clearer route `POST /api/auth/signup` as the API is organized.
+The current frontend sends the request to the purpose-specific endpoint `POST http://localhost:5000/api/auth/signup`. The `/api` segment identifies API routes, `/auth` groups authentication operations, and `/signup` identifies the account-creation action.
+
+While the signup request is in progress, a generic full-screen spinner overlay blocks interaction with the page. The overlay disappears when the request succeeds or fails. If the server cannot be reached, the page shows a neutral server-unavailable message rather than asking the user to start the backend.
+
+After a successful signup, the page navigates to login with temporary React Router navigation state. The login page displays `Account created successfully. Please log in.` for three seconds, then clears both the message and navigation state.
 
 The login page includes email, password, remember-me state, forgot-password navigation, and a show/hide password control. The forgot-password page collects an email address and displays a placeholder success message until the backend recovery service exists.
 
@@ -192,7 +196,7 @@ Completed:
 - MongoDB connection setup exists in the server startup file.
 - `server/src/models/User.js` has been added and validated locally.
 - A temporary signup endpoint currently validates fields, checks for duplicate email, creates a User document, and returns a response.
-- The frontend is connected to that endpoint and handles success, API errors, and network failures.
+- The frontend is connected to `POST /api/auth/signup` and handles success, API errors, network failures, loading state, and temporary post-signup feedback.
 
 ### Database configuration lesson
 
@@ -212,7 +216,7 @@ connects to `medihelp-dev`. If the application inserts a document but Atlas appe
 
 Not implemented yet:
 
-- Proper `/api/auth/signup` and login API endpoints
+- Login API endpoint and authentication session flow
 - Password hashing
 - JWT creation and verification
 - Email and phone verification

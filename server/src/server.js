@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.post("/", async (req, res) => {
+app.post("/api/auth/signup", async (req, res) => {
   try {
     const { firstName, lastName, email, phone, password, confirmPassword } = req.body;
 

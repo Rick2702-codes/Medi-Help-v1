@@ -1,16 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styles from './LoginPage.module.css';
 
+type LoginNavigationState = {
+  successMessage?: string;
+};
+
 const LoginPage: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(
+    (location.state as LoginNavigationState | null)?.successMessage || '',
+  );
 
   useEffect(() => {
     document.title = 'Login | Medi-Help';
   }, []);
+
+  useEffect(() => {
+    if (!successMessage) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setSuccessMessage('');
+      navigate(location.pathname, { replace: true, state: null });
+    }, 3000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [location.pathname, navigate, successMessage]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +62,12 @@ const LoginPage: React.FC = () => {
             <p className={styles.eyebrow}>Welcome back</p>
             <h2>Sign in</h2>
           </div>
+
+          {successMessage && (
+            <p className={styles.successMessage} role="status">
+              {successMessage}
+            </p>
+          )}
 
           <form className={styles.form} onSubmit={handleLogin}>
             <label className={styles.field}>

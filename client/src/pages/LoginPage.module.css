@@ -105,6 +105,18 @@
   color: var(--text-primary);
 }
 
+.successMessage {
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border: 1px solid var(--success-border);
+  border-radius: 10px;
+  background: var(--success-bg);
+  color: var(--success-text);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
 .form {
   display: grid;
   gap: 18px;

@@ -1,7 +1,7 @@
 # Medi-Help: Complete Project Brief & Implementation Guide
 
-**Last Updated**: 2026-09-12  
-**Project Status**: Signup Request Flow Connected — Auth API Hardening and Database Alignment Next
+**Last Updated**: 2026-09-16  
+**Project Status**: Signup API Route and Auth UX Connected — Password Hashing and Login API Next
 
 ---
 
@@ -62,7 +62,7 @@ The project has moved beyond skeleton setup and into a more intentional product 
 - Make authentication smooth and predictable: sign up first, then sign in.
 - Keep the UI consistent across login, sign-up, and password recovery screens.
 - Add dark/light mode support without sacrificing clarity or accessibility.
-- Keep the auth flow ready for backend API integration without overbuilding UI complexity.
+- Keep the auth flow connected to clear backend API routes without overbuilding UI complexity.
 
 ### Current implementation status
 - Login page has been redesigned with a modern card-based layout and stronger UX.
@@ -71,6 +71,9 @@ The project has moved beyond skeleton setup and into a more intentional product 
 - Global light/dark toggle is active across routes and persists in localStorage.
 - Password show/hide toggles were added to improve usability.
 - Sign-up now collects a required mobile number for future SMS reminder delivery.
+- Signup submits to `POST /api/auth/signup` and checks the HTTP response before redirecting.
+- Signup shows a generic full-screen spinner while the backend request is active and a neutral server-unavailable message when the request cannot reach the backend.
+- Successful signup redirects to login with a temporary success message that disappears automatically.
 
 ### Learning and collaboration status
 
@@ -357,7 +360,7 @@ Version Control: Git + GitHub
 
 ---
 
-## 🔌 API Endpoints (Planned)
+## 🔌 API Endpoints
 
 ### Authentication
 ```
@@ -494,14 +497,19 @@ describe('Authentication', () => {
 - Forgot password page implementation
 - Global light/dark theme toggle
 - Password visibility toggle for auth screens
+- Signup API route at `POST /api/auth/signup`
+- Frontend signup request and HTTP response handling
+- Full-screen generic loading spinner during signup requests
+- Temporary success feedback after account creation
 - Development environment (Vite, nodemon)
 
 ### ❌ Not Started
-- Database models & schema
-- API endpoints & controllers
+- Password hashing and secure authentication storage
+- Login API endpoint and session/JWT flow
+- Route/controller separation for authentication
 - Authentication middleware & routes
 - Frontend pages beyond LoginPage
-- API integration (axios calls)
+- API integration beyond signup
 - State management (if needed)
 - Testing setup (Supertest, Jest, Playwright)
 - Notification system
@@ -512,12 +520,15 @@ describe('Authentication', () => {
 ## 🚀 Implementation Roadmap
 
 ### Week 1-2: Database & API Setup
-- [ ] Create MongoDB models (User, Medicine, DoctorVisit, StockTracking)
+- [x] Create the initial MongoDB User model
+- [ ] Create remaining MongoDB models (Medicine, DoctorVisit, StockTracking)
 - [ ] Set up database connection & validation
-- [ ] Build authentication endpoints (signup, login, logout)
+- [x] Build the initial signup endpoint
+- [ ] Build login and logout endpoints
 - [ ] Create middleware (JWT verification, error handling)
-- [ ] Connect frontend auth forms to backend API endpoints
-- [ ] Add real validation and error handling for login/signup responses
+- [x] Connect the signup form to the backend API endpoint
+- [x] Add response and network error handling for signup
+- [ ] Add login response handling
 - [ ] Add verified phone number and notification preferences to the User model
 - [ ] Choose and configure the initial SMS and email providers
 

@@ -44,7 +44,7 @@ const SignUpPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("http://localhost:5000", {
+      const response = await fetch("http://localhost:5000/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -58,16 +58,19 @@ const SignUpPage: React.FC = () => {
         return;
       }
 
-      navigate('/');
+      navigate('/', {
+        state: { successMessage: 'Account created successfully. Please log in.' },
+      });
     } catch {
-      setError('Unable to reach the server. Please check your connection and try again.');
+      setError('The server is currently unavailable. Please try again later.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className={styles.pageShell}>
+    <>
+      <div className={styles.pageShell} aria-busy={isSubmitting}>
       <div className={styles.authCard}>
         <div className={styles.brandPanel}>
           <div className={styles.badge}>Stay on track</div>
@@ -208,7 +211,16 @@ const SignUpPage: React.FC = () => {
           </p>
         </div>
       </div>
-    </div>
+      </div>
+
+      {isSubmitting && (
+        <div className={styles.loadingOverlay} role="status" aria-label="Loading">
+          <div className={styles.loadingPanel}>
+            <span className={styles.loadingSpinner} aria-hidden="true" />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
